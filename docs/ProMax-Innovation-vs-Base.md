@@ -69,13 +69,13 @@ speckit.specify → speckit.clarify → speckit.checklist → speckit.plan → s
 
 ### full 模式最终文档结构
 
-假设需求标识为 **`DPCMNM-123: xxx`**，目录名通常取路径安全形式 **`DPCMNM-123-xxx`**。
+假设需求标识为 **`001-短信验证码登录`**（格式示例：`001-需求xxx`）。
 
 ```text
 your-project/
 │
 ├── specs/
-│   └── DPCMNM-123-xxx/
+│   └── 001-短信验证码登录/
 │       ├── spec.md
 │       ├── plan.md
 │       ├── research.md
@@ -88,18 +88,18 @@ your-project/
 │       │   ├── requirements.md
 │       │   └── security.md
 │       └── contracts/
-│           └── payment-callback.yaml
+│           └── auth-sms.yaml
 │
 ├── .harness/
 │   ├── scope/
 │   │   └── sprint-1.yaml
 │   ├── sprints/
-│   │   └── DPCMNM-123-xxx/
+│   │   └── 001-短信验证码登录/
 │   │       ├── sprint-1.md
 │   │       ├── sprint-1-progress.md
 │   │       └── sprint-1-checkpoint.md
 │   └── metrics/
-│       └── DPCMNM-123-xxx/
+│       └── 001-短信验证码登录/
 │           └── sprint-1.json
 │
 ├── src/
@@ -135,9 +135,9 @@ your-project/
 
 ## Step 4：用自然语言描述需求
 
-在新会话里直接说需求，可带工单号，例如：
+在新会话里直接说需求，可带需求编号，例如：
 
-> DPCMNM-123：增加一个登录设备 MAC 地址监控列表页面
+> 001-短信验证码登录：新增短信验证码登录功能，支持手机号注册、发送验证码、验证码校验登录
 
 **不用记 slash 命令。** AI 自动读 Router、选模式、列出后续命令流。
 
@@ -162,7 +162,7 @@ AI 第一次回复会告诉你：
 specs/你的需求ID/dashboard.html
 ```
 
-页面自动刷新，显示当前步骤和下一步。也可直接问：「DPCMNM-123 做到哪了？」
+页面自动刷新，显示当前步骤和下一步。也可直接问：「001-短信验证码登录 做到哪了？」
 
 ---
 
@@ -186,7 +186,7 @@ specs/你的需求ID/dashboard.html
 
 **你说：**
 
-> DPCMNM-123：增加 MAC 地址监控列表页，支持搜索和导出
+> 001-短信验证码登录：新增短信验证码登录功能，用户输入手机号获取验证码并完成登录
 
 **AI 示意：**
 
@@ -194,7 +194,7 @@ specs/你的需求ID/dashboard.html
 模式：speclite · 风险：低
 命令流：speckit.specify → speckit.clarify → speckit.plan → speckit.tasks
         → harness.exec → harness.eval → harness.fix
-Dashboard：specs/DPCMNM-123/dashboard.html
+Dashboard：specs/001-短信验证码登录/dashboard.html
 请确认后回复「继续」
 ```
 
@@ -202,21 +202,21 @@ Dashboard：specs/DPCMNM-123/dashboard.html
 
 ---
 
-### 示例 2：改按钮文案（direct）
+### 示例 2：改登录页文案（direct）
 
 **你说：**
 
-> 把「提交」改成「立即登录」，只改文案
+> 把登录页「获取验证码」按钮改成「发送验证码」，只改文案
 
 **AI：** 选 `direct`，直接改代码给 diff，结束。
 
 ---
 
-### 示例 3：支付接口（full）
+### 示例 3：登录安全加固（full）
 
 **你说：**
 
-> 新增微信支付回调，涉及订单状态变更和退款
+> 001-短信验证码登录：新增短信验证码登录，涉及鉴权、会话管理和风控限流
 
 **AI：** 选 `full`，展示完整命令流，等你确认后逐步「继续」。
 
@@ -226,7 +226,7 @@ Dashboard：specs/DPCMNM-123/dashboard.html
 
 **你说：**
 
-> 写登录模块 PRD 和验收标准，先不写代码
+> 001-短信验证码登录：写短信验证码登录的 PRD 和验收标准，先不写代码
 
 **AI：** 选 `doc`，执行 specify → clarify → checklist。
 
@@ -236,7 +236,7 @@ Dashboard：specs/DPCMNM-123/dashboard.html
 
 **你说：**
 
-> DPCMNM-123 做到哪了？
+> 001-短信验证码登录 做到哪了？
 
 **AI：** 读 `dashboard-state.json`，汇报已完成步骤与下一步。
 
