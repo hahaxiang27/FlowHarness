@@ -10,9 +10,9 @@
 
 **Do not** open a public GitHub issue for security vulnerabilities.
 
-Please report security issues privately to the repository maintainers
-(AsiaInfo, Inc.) through your organization's security channel or by
-opening a **private** security advisory on GitHub if enabled.
+Please report security issues privately to the project maintainers
+through your organization's security channel or by opening a **private**
+security advisory on GitHub if enabled.
 
 Include:
 

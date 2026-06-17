@@ -1,8 +1,8 @@
-# Contributing to FlowGate SDD
+# Contributing to FlowHarness SDD
 
 [中文贡献指南](CONTRIBUTING.zh-CN.md)
 
-Thank you for your interest in FlowGate SDD. To protect contributors and
+Thank you for your interest in FlowHarness SDD. To protect contributors and
 copyright holders, please read this document before opening issues or pull requests.
 
 ## Legal Terms
@@ -14,9 +14,9 @@ copyright holders, please read this document before opening issues or pull reque
    [NOTICE](NOTICE) file, or managed-block markers in toolkit templates unless
    explicitly approved by maintainers.
 
-3. **Trademarks.** Do not use "FlowGate SDD", "流门 SDD", or confusingly similar
-   names in forked or derivative distributions without written permission from
-   AsiaInfo, Inc.
+3. **Trademarks.** Do not use "FlowHarness SDD" or confusingly similar names in
+   forked or derivative distributions without written permission from the
+   project maintainers.
 
 4. **No CLA required for small fixes.** For substantial features or architectural
    changes, maintainers may ask for additional confirmation of licensing intent.
@@ -40,7 +40,7 @@ Open an issue before starting work on these topics.
 ## Development Workflow
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/hahaxiang27/speckit-harness-flowgate.git
 cd speckit-harness-flowgate
 bash tests/validate-install.sh
 bash tests/validate-agents-merge.sh
@@ -67,6 +67,5 @@ Report vulnerabilities privately. See [SECURITY.md](SECURITY.md).
 
 ## Contact
 
-For licensing or trademark questions, contact the repository maintainers
-(AsiaInfo, Inc.) through the issue tracker with the `legal` label or via
-your organization's internal channel.
+For licensing or trademark questions, contact the project maintainers through
+the issue tracker with the `legal` label.

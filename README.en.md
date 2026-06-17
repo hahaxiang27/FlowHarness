@@ -1,17 +1,17 @@
-# FlowGate SDD
+# FlowHarness SDD
 
 **SpecKit + Harness AI Dev Environment** — natural-language driven spec development with Router mode selection, Step Gate execution, and live Dashboard visibility.
 
 [中文 README](README.md) · [Innovation vs Base](docs/ProMax-Innovation-vs-Base.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![NOTICE](https://img.shields.io/badge/Copyright-AsiaInfo-orange.svg)](NOTICE)
+[![NOTICE](https://img.shields.io/badge/Copyright-FlowHarness-orange.svg)](NOTICE)
 
 ---
 
 ## Overview
 
-FlowGate SDD integrates [SpecKit](https://github.com/github/spec-kit) Specification-Driven Development with a Harness quality loop into a deployable **AI Dev Environment**:
+FlowHarness SDD integrates [SpecKit](https://github.com/github/spec-kit) Specification-Driven Development with a **Harness** quality loop into a deployable **AI Dev Environment**:
 
 ```
 Natural-language requirement → Router (6 modes) → Dashboard
@@ -33,9 +33,9 @@ Natural-language requirement → Router (6 modes) → Dashboard
 ### 1. Install
 
 ```bash
-git clone <this-repo-url> ~/speckit-harness-flowgate
+git clone https://github.com/hahaxiang27/speckit-harness-flowgate.git ~/flowharness-sdd
 cd /path/to/your/project
-bash ~/speckit-harness-flowgate/install.sh --agent cursor
+bash ~/flowharness-sdd/install.sh --agent cursor
 ```
 
 ### 2. Constitution → new session → describe requirement
@@ -63,7 +63,7 @@ See [docs/ProMax-Innovation-vs-Base.md](docs/ProMax-Innovation-vs-Base.md) for f
 ## Repository Layout
 
 ```text
-speckit-harness-flowgate/
+flowharness-sdd/
 ├── install.sh
 ├── router/
 ├── commands/
@@ -119,11 +119,11 @@ bash tests/validate-agents-merge.sh
 ## Copyright & Contributing
 
 - **License:** [MIT License](LICENSE)
-- **Copyright & trademarks:** [NOTICE](NOTICE) — AsiaInfo, Inc.
+- **Copyright & trademarks:** [NOTICE](NOTICE)
 - **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) / [CONTRIBUTING.zh-CN.md](CONTRIBUTING.zh-CN.md)
 - **Code of conduct:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
-You may not use the names "FlowGate SDD" or "流门 SDD" to endorse derivative products without written permission.
+You may not use the name "FlowHarness SDD" to endorse derivative products without written permission from the project maintainers.
 
 ---
 

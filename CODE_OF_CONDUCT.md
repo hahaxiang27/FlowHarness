@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We pledge to make participation in FlowGate SDD a harassment-free
+We pledge to make participation in FlowHarness SDD a harassment-free
 experience for everyone, regardless of background or experience level.
 
 ## Expected Behavior

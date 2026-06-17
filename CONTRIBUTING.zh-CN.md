@@ -1,8 +1,8 @@
-# FlowGate SDD 贡献指南
+# FlowHarness SDD 贡献指南
 
 [English](CONTRIBUTING.md)
 
-感谢关注 **FlowGate SDD（流门 SDD）**。为保护开发者与著作权人权益，请在提 Issue 或 PR 前阅读本文。
+感谢关注 **FlowHarness SDD**。为保护开发者与著作权人权益，请在提 Issue 或 PR 前阅读本文。
 
 ## 法律与著作权
 
@@ -10,7 +10,7 @@
 
 2. **著作权与 NOTICE。** 不得擅自删除或修改版权申明、[NOTICE](NOTICE) 文件，以及模板中的托管标记（如 `AGENTS.md` 里的 `speckit-harness-toolkit:managed` 区块），除非维护者明确批准。
 
-3. **商标。** 未经 AsiaInfo, Inc. 书面许可，不得在 Fork 或衍生发行版中使用「FlowGate SDD」「流门 SDD」或易混淆名称进行宣传或背书。
+3. **商标。** 未经项目维护者书面许可，不得在 Fork 或衍生发行版中使用「FlowHarness SDD」或易混淆名称进行宣传或背书。
 
 4. **大型变更。** 小修复无需 CLA；涉及架构或核心编排逻辑的重大变更，维护者可能要求额外确认授权意图。
 
@@ -33,7 +33,7 @@
 ## 本地验证
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/hahaxiang27/speckit-harness-flowgate.git
 cd speckit-harness-flowgate
 bash tests/validate-install.sh
 bash tests/validate-agents-merge.sh
@@ -60,4 +60,4 @@ bash tests/validate-router-config.sh
 
 ## 联系
 
-许可或商标问题请通过 Issue（标签 `legal`）或组织内部渠道联系维护者（AsiaInfo, Inc.）。
+许可或商标问题请通过 Issue（标签 `legal`）联系项目维护者。
