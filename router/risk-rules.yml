@@ -1,0 +1,28 @@
+risk_levels:
+  low:
+    description: Single-file or small changes with no external interface or data change.
+    require_human_approval: false
+
+  medium:
+    description: Normal business features touching multiple files or interfaces.
+    require_human_approval: false
+
+  high:
+    description: Permissions, approvals, data migration, core flows, or security-sensitive work.
+    require_human_approval: true
+
+  critical:
+    description: Production configuration, deployment, database deletion, payment, or sensitive data.
+    require_human_approval: true
+    require_checkpoint: true
+
+approval_required_for:
+  - delete files
+  - database migration
+  - modify CI/CD
+  - modify deployment scripts
+  - modify permission framework
+  - modify authentication logic
+  - modify production configuration
+  - git push
+  - rm -rf

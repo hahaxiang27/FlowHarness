@@ -1,0 +1,133 @@
+modes:
+  direct:
+    name: Direct Mode
+    goal: Bypass SDD/Harness for trivial UI or copy changes and implement immediately in source code.
+    bypass_toolkit: true
+    triggers:
+      - ui only
+      - button
+      - modal
+      - dialog
+      - copy update
+      - style update
+      - tooltip
+      - label
+      - frontend-only
+    steps: []
+    require_spec: false
+    require_dashboard: false
+    default_output:
+      - diff
+
+  doc:
+    name: Document Mode
+    goal: Generate requirements, PRD, specs, acceptance criteria, or technical drafts.
+    triggers:
+      - write requirements
+      - PRD
+      - technical proposal
+      - API documentation
+      - acceptance criteria
+    steps:
+      - speckit.specify
+      - speckit.clarify
+      - speckit.checklist
+    harness: false
+    default_output:
+      - spec.md
+      - checklist.md
+      - open-questions.md
+
+  fast:
+    name: Fast Mode
+    goal: Complete small, low-risk changes quickly with focused validation.
+    triggers:
+      - small bug
+      - small change
+      - single file
+      - copy update
+      - style update
+    steps:
+      - context.scan
+      - harness.exec
+      - harness.eval
+    require_spec: false
+    default_output:
+      - diff
+      - eval-report.md
+
+  speclite:
+    name: SpecLite Mode
+    goal: Move medium-sized features from lightweight spec to implementation.
+    triggers:
+      - new feature
+      - one page
+      - several APIs
+      - business logic
+    steps:
+      - speckit.specify
+      - speckit.clarify
+      - speckit.plan
+      - speckit.tasks
+      - harness.exec
+      - harness.eval
+      - harness.fix
+    default_output:
+      - spec.md
+      - plan.md
+      - tasks.md
+      - eval-report.md
+
+  full:
+    name: Full Closed Loop Mode
+    goal: Handle high-risk or cross-module work with complete governance and evidence.
+    triggers:
+      - cross module
+      - permission
+      - approval
+      - data migration
+      - audit log
+      - security
+      - core flow
+    steps:
+      - speckit.specify
+      - speckit.clarify
+      - speckit.checklist
+      - speckit.plan
+      - speckit.tasks
+      - speckit.analyze
+      - harness.scope
+      - harness.start
+      - harness.exec
+      - harness.eval
+      - harness.fix
+      - harness.checkpoint
+      - harness.metrics
+    default_output:
+      - spec.md
+      - plan.md
+      - tasks.md
+      - scope.yaml
+      - checkpoint.md
+      - metrics.json
+      - evidence.md
+
+  debug:
+    name: Debug Mode
+    goal: Diagnose failures, fix regressions, and prove the fix with evidence.
+    triggers:
+      - build failed
+      - test failed
+      - production issue
+      - hard bug
+      - performance issue
+    steps:
+      - context.scan
+      - harness.review
+      - harness.fix
+      - harness.eval
+      - harness.checkpoint
+    default_output:
+      - diagnosis.md
+      - fix-report.md
+      - eval-report.md

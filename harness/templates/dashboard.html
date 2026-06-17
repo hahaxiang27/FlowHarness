@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{N}-{feature-slug} · 全流程追踪</title>
+<style>
+:root {
+  --green:#22c55e; --yellow:#eab308; --red:#ef4444; --blue:#3b82f6; --gray:#94a3b8;
+  --bg:#f1f5f9; --card:#fff; --text:#1e293b; --muted:#64748b; --border:#e2e8f0;
+  --sidebar-w:260px; --topbar-h:52px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font:14px/1.5 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+
+.topbar { height:var(--topbar-h); min-height:var(--topbar-h); background:#1e293b; color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 24px; z-index:10; }
+.topbar h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:10px; }
+.topbar h1 .spec-tag { background:#334155; font-size:11px; padding:2px 10px; border-radius:10px; font-weight:400; }
+.topbar .right { display:flex; align-items:center; gap:16px; font-size:13px; }
+.topbar .grade { background:#fff; color:#1e293b; font-size:20px; font-weight:800; padding:4px 14px; border-radius:6px; }
+
+.main { display:flex; flex:1; overflow:hidden; }
+
+.sidebar { width:var(--sidebar-w); min-width:var(--sidebar-w); background:#fff; border-right:1px solid var(--border); overflow-y:auto; display:flex; flex-direction:column; }
+.sidebar .sec-title { font-size:10px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:1px; padding:14px 18px 6px; }
+.step { display:flex; align-items:flex-start; gap:10px; padding:9px 18px; cursor:pointer; border-left:3px solid transparent; transition:background .15s; position:relative; }
+.step:hover { background:#f8fafc; }
+.step.active { background:#eff6ff; border-left-color:var(--blue); }
+.step .s-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:1px; }
+.s-dot.done { background:#dcfce7; color:#16a34a; }
+.s-dot.current { background:#3b82f6; color:#fff; }
+.s-dot.next { background:#dbeafe; color:#2563eb; border:2px solid #3b82f6; }
+.s-dot.pending { background:#f1f5f9; color:#94a3b8; }
+.s-dot.warn { background:#fef9c3; color:#a16207; }
+.step .s-info { flex:1; min-width:0; }
+.step .s-name { font-size:13px; font-weight:500; line-height:1.3; }
+.step .s-name.done { color:var(--text); }
+.step .s-name.pending { color:var(--gray); }
+.step .s-meta { font-size:10px; color:var(--muted); margin-top:1px; }
+.step .s-badge { font-size:9px; font-weight:700; padding:1px 6px; border-radius:8px; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+.s-badge.ok { background:#dcfce7; color:#16a34a; }
+.s-badge.next { background:#dbeafe; color:#2563eb; }
+.s-badge.warn { background:#fef9c3; color:#a16207; }
+.s-badge.fail { background:#fef2f2; color:#dc2626; }
+
+.content { flex:1; overflow-y:auto; padding:24px 28px; }
+
+.step-panel { display:none; }
+.step-panel.active { display:block; animation: fadeIn .2s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
+
+.panel-header { margin-bottom:20px; }
+.panel-header h2 { font-size:20px; font-weight:700; display:flex; align-items:center; gap:10px; }
+.panel-header .ph-meta { font-size:12px; color:var(--muted); margin-top:4px; }
+
+.card-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.card-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:14px; }
+.card { background:var(--card); border-radius:10px; padding:18px 20px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+.card.full { grid-column:1/-1; }
+.card h3 { font-size:14px; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+
+.tbl { width:100%; border-collapse:collapse; font-size:13px; }
+.tbl th { text-align:left; padding:7px 10px; background:#f8fafc; font-size:11px; color:var(--muted); font-weight:600; border-bottom:2px solid var(--border); }
+.tbl td { padding:7px 10px; border-bottom:1px solid #f1f5f9; }
+.tbl .ok { color:var(--green); font-weight:600; }
+.tbl .warn { color:var(--yellow); font-weight:600; }
+.tbl .bad { color:var(--red); font-weight:600; }
+
+.tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:10px; font-weight:700; }
+.tag-g { background:#dcfce7; color:#16a34a; }
+.tag-y { background:#fef9c3; color:#a16207; }
+.tag-r { background:#fef2f2; color:#dc2626; }
+.tag-b { background:#dbeafe; color:#2563eb; }
+.tag-gray { background:#f1f5f9; color:#64748b; }
+
+.kv { display:grid; grid-template-columns:1fr 1fr; gap:5px 16px; }
+.kv .kv-line { display:flex; gap:6px; font-size:12px; }
+.kv .kv-k { color:var(--muted); flex-shrink:0; min-width:80px; }
+.kv-1 { display:flex; flex-direction:column; gap:5px; }
+.kv-1 .kv-line { display:flex; gap:8px; font-size:13px; }
+
+.stat-row { display:flex; gap:28px; flex-wrap:wrap; }
+.stat-item { text-align:center; }
+.stat-item .n { font-size:26px; font-weight:700; }
+.stat-item .l { font-size:11px; color:var(--muted); }
+
+.health-row { display:flex; gap:10px; flex-wrap:wrap; }
+.health-row .h { padding:8px 16px; border-radius:8px; font-size:12px; font-weight:600; text-align:center; }
+.h-g { background:#dcfce7; color:#16a34a; }
+.h-y { background:#fef9c3; color:#a16207; }
+.h-r { background:#fef2f2; color:#dc2626; }
+
+.pline { display:flex; align-items:center; gap:8px; padding:7px 10px; background:#fef2f2; border-radius:6px; font-size:12px; margin:4px 0; }
+.pline .pid { background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:1px 7px; border-radius:8px; }
+
+.batch-line { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:6px; background:#f8fafc; margin-bottom:6px; font-size:13px; }
+.batch-line .b-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.b-dot.g { background:var(--green); }
+.b-dot.y { background:var(--yellow); }
+
+.exec-timeline { position:relative; padding-left:20px; }
+.exec-timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:var(--border); }
+.exec-step { position:relative; padding:6px 0 6px 20px; font-size:13px; }
+.exec-step::before { content:''; position:absolute; left:-16px; top:12px; width:10px; height:10px; border-radius:50%; }
+.exec-step.done::before { background:var(--green); }
+.exec-step.warn::before { background:var(--yellow); }
+
+code { background:#f1f5f9; padding:1px 5px; border-radius:3px; font-size:12px; }
+
+.footer { text-align:center; color:var(--muted); font-size:10px; padding:12px; border-top:1px solid var(--border); margin-top:auto; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>
+    <span id="topbar-title">{Feature Name}</span>
+    <span class="spec-tag" id="topbar-tag">{N}-{feature-slug}</span>
+  </h1>
+  <div class="right">
+    <span id="topbar-dates">{start-date} → </span>
+    <span id="topbar-stats">0 任务 · 0 完成 · 0 待执行</span>
+    <span class="grade" id="topbar-grade">--</span>
+  </div>
+</div>
+
+<div class="main">
+  <nav class="sidebar" id="sidebar">
+    <div class="sec-title">执行计划</div>
+    <div class="step active" data-step="workflow">
+      <div class="s-dot current">🧭</div>
+      <div class="s-info"><div class="s-name">执行计划</div><div class="s-meta">模式 · 步骤 · 下一步</div></div>
+      <span class="s-badge next">查看</span>
+    </div>
+    <div id="sidebar-workflow"></div>
+
+    <div class="sec-title">SDD 规划阶段</div>
+    <div class="step" data-step="specify">
+      <div class="s-dot pending">📋</div>
+      <div class="s-info"><div class="s-name pending">speckit.specify</div><div class="s-meta">功能规格</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="plan">
+      <div class="s-dot pending">📐</div>
+      <div class="s-info"><div class="s-name pending">speckit.plan</div><div class="s-meta">技术方案</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="tasks">
+      <div class="s-dot pending">📋</div>
+      <div class="s-info"><div class="s-name pending">speckit.tasks</div><div class="s-meta">任务拆解</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="analyze">
+      <div class="s-dot pending">🔍</div>
+      <div class="s-info"><div class="s-name pending">speckit.analyze</div><div class="s-meta">一致性审计</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+
+    <div class="sec-title">Harness 规划</div>
+    <div class="step" data-step="hplan">
+      <div class="s-dot pending">📅</div>
+      <div class="s-info"><div class="s-name pending">harness.plan</div><div class="s-meta">Sprint 计划</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="scope">
+      <div class="s-dot pending">🎯</div>
+      <div class="s-info"><div class="s-name pending">harness.scope</div><div class="s-meta">模块边界</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="start">
+      <div class="s-dot pending">🚀</div>
+      <div class="s-info"><div class="s-name pending">harness.start</div><div class="s-meta">环境就绪</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+
+    <div class="sec-title">Harness 执行</div>
+    <div class="step" data-step="b1">
+      <div class="s-dot pending">B1</div>
+      <div class="s-info"><div class="s-name pending">批次 1</div><div class="s-meta">待规划</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="b2">
+      <div class="s-dot pending">B2</div>
+      <div class="s-info"><div class="s-name pending">批次 2</div><div class="s-meta">待规划</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+
+    <div class="sec-title">收尾</div>
+    <div class="step" data-step="eval">
+      <div class="s-dot pending">✅</div>
+      <div class="s-info"><div class="s-name pending">harness.eval</div><div class="s-meta">四级验证</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="checkpoint">
+      <div class="s-dot pending">🏁</div>
+      <div class="s-info"><div class="s-name pending">harness.checkpoint</div><div class="s-meta">Constitution 审查</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+    <div class="step" data-step="metrics">
+      <div class="s-dot pending">📊</div>
+      <div class="s-info"><div class="s-name pending">harness.metrics</div><div class="s-meta">五维度量</div></div>
+      <span class="s-badge">待执行</span>
+    </div>
+  </nav>
+
+  <div class="content" id="content">
+    <div class="step-panel active" id="panel-workflow">
+      <div class="panel-header">
+        <h2>🧭 执行计划</h2>
+        <div class="ph-meta" id="panel-plan-meta">等待加载 dashboard-state.json</div>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <h3>模式与状态</h3>
+          <div class="kv-1" id="panel-plan-kv"></div>
+        </div>
+        <div class="card">
+          <h3>下一步</h3>
+          <div class="kv-1" id="panel-plan-next"></div>
+        </div>
+      </div>
+      <div class="card full">
+        <h3>计划步骤</h3>
+        <table class="tbl" id="panel-plan-steps">
+          <thead>
+            <tr><th>#</th><th>命令</th><th>说明</th><th>状态</th><th>产出</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel-specify">
+      <div class="panel-header"><h2>📋 speckit.specify</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 specify 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-plan">
+      <div class="panel-header"><h2>📐 speckit.plan</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 plan 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-tasks">
+      <div class="panel-header"><h2>📋 speckit.tasks</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 tasks 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-analyze">
+      <div class="panel-header"><h2>🔍 speckit.analyze</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 analyze 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-hplan">
+      <div class="panel-header"><h2>📅 harness.plan</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 harness.plan 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-scope">
+      <div class="panel-header"><h2>🎯 harness.scope</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 harness.scope 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-start">
+      <div class="panel-header"><h2>🚀 harness.start</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 harness.start 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-b1">
+      <div class="panel-header"><h2>批次 1</h2><div class="ph-meta">待规划</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在批次执行时填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-b2">
+      <div class="panel-header"><h2>批次 2</h2><div class="ph-meta">待规划</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在批次执行时填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-eval">
+      <div class="panel-header"><h2>✅ harness.eval · 四级验证</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 eval 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-checkpoint">
+      <div class="panel-header"><h2>🏁 harness.checkpoint · Constitution 收官审查</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 checkpoint 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-metrics">
+      <div class="panel-header"><h2>📊 harness.metrics · 五维度量报告</h2><div class="ph-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;">AI 将在 metrics 完成后填充此面板</p></div>
+    </div>
+    <div class="step-panel" id="panel-generic">
+      <div class="panel-header"><h2 id="panel-generic-title">步骤详情</h2><div class="ph-meta" id="panel-generic-meta">待执行</div></div>
+      <div class="card"><p style="color:var(--muted);text-align:center;padding:40px 0;" id="panel-generic-body">AI 将在该步骤完成后填充此面板</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const COMMAND_META = {
+  "speckit.specify": { icon: "📋", step: "specify", meta: "功能规格" },
+  "speckit.clarify": { icon: "💬", step: "specify", meta: "需求澄清" },
+  "speckit.plan": { icon: "📐", step: "plan", meta: "技术方案" },
+  "speckit.tasks": { icon: "📝", step: "tasks", meta: "任务拆解" },
+  "speckit.analyze": { icon: "🔍", step: "analyze", meta: "一致性审计" },
+  "speckit.checklist": { icon: "✓", step: "tasks", meta: "检查清单" },
+  "harness.plan": { icon: "📅", step: "hplan", meta: "Sprint 计划" },
+  "harness.scope": { icon: "🎯", step: "scope", meta: "模块边界" },
+  "harness.start": { icon: "🚀", step: "start", meta: "环境就绪" },
+  "harness.exec": { icon: "⚙️", step: "b1", meta: "任务执行" },
+  "harness.eval": { icon: "✅", step: "eval", meta: "四级验证" },
+  "harness.fix": { icon: "🔧", step: "eval", meta: "定向修正" },
+  "harness.checkpoint": { icon: "🏁", step: "checkpoint", meta: "Constitution 审查" },
+  "harness.metrics": { icon: "📊", step: "metrics", meta: "五维度量" },
+  "context.scan": { icon: "🔎", step: "start", meta: "上下文扫描" },
+  "harness.review": { icon: "👀", step: "analyze", meta: "代码审查" }
+};
+
+const STATUS_LABEL = {
+  done: "完成",
+  active: "执行中",
+  next: "下一步",
+  pending: "待执行",
+  skipped: "跳过",
+  blocked: "阻塞"
+};
+
+const STATUS_CLASS = {
+  done: "ok",
+  active: "warn",
+  next: "warn",
+  pending: "",
+  skipped: "",
+  blocked: "bad"
+};
+
+function commandSlug(command) {
+  return String(command || "step").replace(/\./g, "-");
+}
+
+function commandMeta(command) {
+  return COMMAND_META[command] || { icon: "•", step: "generic", meta: command || "步骤" };
+}
+
+function statusDotClass(status) {
+  if (status === "done") return "done";
+  if (status === "active") return "current";
+  if (status === "next") return "next";
+  if (status === "blocked") return "warn";
+  return "pending";
+}
+
+function statusBadgeClass(status) {
+  if (status === "done") return "ok";
+  if (status === "next") return "next";
+  if (status === "active") return "warn";
+  if (status === "blocked") return "fail";
+  return "";
+}
+
+function activatePanel(stepKey) {
+  document.querySelectorAll(".step").forEach((el) => el.classList.remove("active"));
+  document.querySelectorAll(".step-panel").forEach((el) => el.classList.remove("active"));
+  const stepEl = document.querySelector(`.step[data-step="${stepKey}"]`);
+  if (stepEl) stepEl.classList.add("active");
+  const panel = document.getElementById(`panel-${stepKey}`);
+  if (panel) {
+    panel.classList.add("active");
+    return;
+  }
+  document.getElementById("panel-workflow").classList.add("active");
+}
+
+function bindSidebarNavigation() {
+  document.querySelectorAll(".step").forEach((el) => {
+    el.addEventListener("click", () => activatePanel(el.dataset.step));
+  });
+}
+
+function renderWorkflowSidebar(steps) {
+  const container = document.getElementById("sidebar-workflow");
+  container.innerHTML = "";
+  steps.forEach((step) => {
+    const meta = commandMeta(step.command);
+    const slug = commandSlug(step.command);
+    const row = document.createElement("div");
+    row.className = "step";
+    row.dataset.step = `wf-${slug}`;
+    row.dataset.panel = meta.step;
+    row.innerHTML = `
+      <div class="s-dot ${statusDotClass(step.status)}">${meta.icon}</div>
+      <div class="s-info">
+        <div class="s-name ${step.status === "done" ? "done" : "pending"}">${step.command}</div>
+        <div class="s-meta">${step.label || meta.meta}</div>
+      </div>
+      <span class="s-badge ${statusBadgeClass(step.status)}">${STATUS_LABEL[step.status] || step.status}</span>
+    `;
+    row.addEventListener("click", () => {
+      document.querySelectorAll("#sidebar-workflow .step").forEach((el) => el.classList.remove("active"));
+      row.classList.add("active");
+      activatePanel(meta.step);
+      if (meta.step === "generic") {
+        document.getElementById("panel-generic-title").textContent = `${meta.icon} ${step.command}`;
+        document.getElementById("panel-generic-meta").textContent = step.label || meta.meta;
+      }
+    });
+    container.appendChild(row);
+  });
+}
+
+function renderPlanPanel(state) {
+  const plan = state.workflow_plan || {};
+  const req = state.current_requirement || {};
+  document.getElementById("panel-plan-meta").textContent =
+    `${plan.phase || "planned"} · ${state.mode || "-"} · ${plan.mode_reason || ""}`.trim();
+
+  document.getElementById("panel-plan-kv").innerHTML = [
+    ["需求 ID", req.requirement_id || "-"],
+    ["标题", req.title || "-"],
+    ["阶段", plan.phase || "-"],
+    ["模式", state.mode || "-"],
+    ["说明", req.summary || "-"]
+  ].map(([k, v]) => `<div class="kv-line"><span class="kv-k">${k}</span><span>${v}</span></div>`).join("");
+
+  document.getElementById("panel-plan-next").innerHTML = [
+    ["下一命令", plan.next_command || "-"],
+    ["说明", plan.next_command_label || "-"],
+    ["用户操作", plan.next_user_action || "继续 / next / continue"],
+    ["审批", (state.risk && state.risk.approval_required) ? "需要确认" : "无需额外确认"]
+  ].map(([k, v]) => `<div class="kv-line"><span class="kv-k">${k}</span><span>${v}</span></div>`).join("");
+
+  const tbody = document.querySelector("#panel-plan-steps tbody");
+  tbody.innerHTML = "";
+  (plan.steps || []).forEach((step) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${step.order || "-"}</td>
+      <td><code>${step.command || "-"}</code></td>
+      <td>${step.label || "-"}</td>
+      <td class="${STATUS_CLASS[step.status] || ""}">${STATUS_LABEL[step.status] || step.status || "-"}</td>
+      <td>${Array.isArray(step.outputs) ? step.outputs.join(", ") : "-"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function syncLegacySidebar(steps) {
+  const byCommand = {};
+  steps.forEach((step) => { byCommand[step.command] = step.status; });
+
+  document.querySelectorAll("#sidebar .step[data-step]").forEach((el) => {
+    const stepKey = el.dataset.step;
+    let matched = null;
+    Object.entries(COMMAND_META).forEach(([command, meta]) => {
+      if (meta.step === stepKey && byCommand[command]) matched = byCommand[command];
+    });
+    if (!matched) return;
+
+    const dot = el.querySelector(".s-dot");
+    const name = el.querySelector(".s-name");
+    const badge = el.querySelector(".s-badge");
+    dot.className = `s-dot ${statusDotClass(matched)}`;
+    name.className = `s-name ${matched === "done" ? "done" : "pending"}`;
+    badge.className = `s-badge ${statusBadgeClass(matched)}`;
+    badge.textContent = STATUS_LABEL[matched] || matched;
+  });
+}
+
+function renderTopbar(state) {
+  const req = state.current_requirement || {};
+  const plan = state.workflow_plan || {};
+  const steps = plan.steps || [];
+  const doneCount = steps.filter((s) => s.status === "done").length;
+  const pendingCount = steps.filter((s) => s.status === "pending" || s.status === "next").length;
+
+  if (req.title) document.getElementById("topbar-title").textContent = req.title;
+  if (req.requirement_id) document.getElementById("topbar-tag").textContent = req.requirement_id;
+  document.getElementById("topbar-stats").textContent =
+    `${steps.length} 步骤 · ${doneCount} 完成 · ${pendingCount} 待执行`;
+  document.getElementById("topbar-grade").textContent = (state.mode || "--").toUpperCase();
+}
+
+function chooseDefaultPanel(steps, phase) {
+  const active = steps.find((s) => s.status === "active");
+  if (active) return commandMeta(active.command).step;
+  const next = steps.find((s) => s.status === "next");
+  if (next) return commandMeta(next.command).step;
+  if (phase === "awaiting_user" || phase === "planned") return "workflow";
+  const lastDone = [...steps].reverse().find((s) => s.status === "done");
+  if (lastDone) return commandMeta(lastDone.command).step;
+  return "workflow";
+}
+
+async function loadDashboardState() {
+  try {
+    const response = await fetch("dashboard-state.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.warn("dashboard-state.json not loaded:", error);
+    return null;
+  }
+}
+
+let initialPanelChosen = false;
+let userPinnedPanel = null;
+
+function renderDashboard(state, choosePanel) {
+  if (!state || !state.workflow_plan || !Array.isArray(state.workflow_plan.steps)) {
+    if (choosePanel) activatePanel("workflow");
+    return;
+  }
+
+  renderTopbar(state);
+  renderPlanPanel(state);
+  renderWorkflowSidebar(state.workflow_plan.steps);
+  syncLegacySidebar(state.workflow_plan.steps);
+
+  if (choosePanel) {
+    const panel = userPinnedPanel || chooseDefaultPanel(state.workflow_plan.steps, state.workflow_plan.phase);
+    activatePanel(panel);
+    initialPanelChosen = true;
+  }
+}
+
+function bindUserPanelPin() {
+  document.querySelectorAll(".step").forEach((el) => {
+    el.addEventListener("click", () => {
+      userPinnedPanel = el.dataset.step || el.dataset.panel || null;
+    });
+  });
+}
+
+let lastStateSignature = "";
+
+async function refreshDashboard(choosePanel) {
+  const state = await loadDashboardState();
+  const signature = JSON.stringify(state?.workflow_plan || {});
+  const changed = signature !== lastStateSignature;
+  lastStateSignature = signature;
+
+  if (!changed && !choosePanel) return;
+  renderDashboard(state, choosePanel);
+}
+
+bindSidebarNavigation();
+bindUserPanelPin();
+refreshDashboard(true);
+setInterval(() => refreshDashboard(false), 3000);
+</script>
+</body>
+</html>

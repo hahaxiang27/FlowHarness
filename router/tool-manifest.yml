@@ -1,0 +1,64 @@
+tools:
+  speckit:
+    role: spec_generation
+    best_for:
+      - requirement_structuring
+      - feature_spec
+      - plan_generation
+      - task_breakdown
+      - contract_generation
+    avoid_when:
+      - tiny_bug_fix
+      - pure_style_change
+      - already_has_clear_tasks
+    outputs:
+      - spec.md
+      - plan.md
+      - tasks.md
+      - contracts/
+
+  openspec:
+    role: change_governance
+    best_for:
+      - existing_system_change
+      - architecture_delta
+      - proposal_review
+      - capability_change
+    avoid_when:
+      - one_shot_small_task
+      - pure_documentation
+    outputs:
+      - proposal.md
+      - deltas
+      - tasks.md
+
+  harness:
+    role: execution_control
+    best_for:
+      - controlled_execution
+      - validation_loop
+      - fix_loop
+      - checkpoint
+      - metrics
+    avoid_when:
+      - pure_documentation
+    outputs:
+      - progress.md
+      - eval-report.md
+      - fix-report.md
+      - metrics.json
+
+  superpowers:
+    role: discipline_plugin
+    best_for:
+      - brainstorming
+      - systematic_debugging
+      - tdd
+      - code_review
+      - verification
+    avoid_when:
+      - small_clear_task
+      - user_requests_minimal_flow
+    outputs:
+      - review_notes
+      - verification_evidence

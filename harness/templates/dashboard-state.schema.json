@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Dev Dashboard State",
+  "type": "object",
+  "required": [
+    "current_requirement",
+    "mode",
+    "requirement_status",
+    "design",
+    "execution",
+    "verification",
+    "risk",
+    "evidence",
+    "learning"
+  ],
+  "properties": {
+    "current_requirement": {
+      "type": "object",
+      "required": ["requirement_id", "title", "summary"],
+      "properties": {
+        "requirement_id": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "feature_path": { "type": "string" }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["direct", "doc", "fast", "speclite", "full", "debug"]
+    },
+    "requirement_status": {
+      "type": "object",
+      "properties": {
+        "clarity": { "type": "string" },
+        "open_questions": { "type": "array", "items": { "type": "string" } },
+        "scope_boundaries": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "design": {
+      "type": "object",
+      "properties": {
+        "technical_plan": { "type": "string" },
+        "impacted_modules": { "type": "array", "items": { "type": "string" } },
+        "api_contracts": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "task_progress": { "type": "string" },
+        "changed_files": { "type": "array", "items": { "type": "string" } },
+        "remaining_tasks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "build": { "type": "string" },
+        "unit_tests": { "type": "string" },
+        "integration_tests": { "type": "string" },
+        "security_scan": { "type": "string" },
+        "boundary_review": { "type": "string" }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "properties": {
+        "level": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "open_risks": { "type": "array", "items": { "type": "string" } },
+        "approval_required": { "type": "boolean" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "diff": { "type": "string" },
+        "test_results": { "type": "array", "items": { "type": "string" } },
+        "review_results": { "type": "array", "items": { "type": "string" } },
+        "checkpoint": { "type": "string" }
+      }
+    },
+    "learning": {
+      "type": "object",
+      "properties": {
+        "new_rules": { "type": "array", "items": { "type": "string" } },
+        "mistakes_corrected": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "workflow_plan": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": ["planned", "executing", "completed", "blocked"]
+        },
+        "current_step_index": { "type": "integer", "minimum": 0 },
+        "mode_reason": { "type": "string" },
+        "artifact_roots": { "type": "array", "items": { "type": "string" } },
+        "approval_gates": { "type": "array", "items": { "type": "string" } },
+        "next_user_action": { "type": "string" },
+        "next_command": { "type": "string" },
+        "next_command_label": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["order", "command", "status"],
+            "properties": {
+              "order": { "type": "integer", "minimum": 1 },
+              "command": { "type": "string" },
+              "label": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["pending", "next", "active", "done", "skipped", "blocked"]
+              },
+              "outputs": { "type": "array", "items": { "type": "string" } },
+              "requires_approval": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

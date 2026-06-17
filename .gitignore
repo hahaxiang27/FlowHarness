@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local agent settings must never be distributed.
+.claude/settings.local.json
+.claude/settings.local.*.json
+
+# Node (如果后续本 repo 加工具)
+node_modules/
+
+# Python (如果后续本 repo 加工具)
+__pycache__/
+*.pyc
+.venv/
+/team-spec/
+
+# 本 toolkit 不应包含任何下游项目运行时产物
+# （toolkit 是源，install.sh 铺到目标项目后才产生 .harness/sprints/ 等）
+
+# 安装/合并测试沙箱
+.tmp-install-check/
+.tmp-agents-merge-check/

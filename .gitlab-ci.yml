@@ -1,0 +1,8 @@
+stages:
+  - test
+
+validate-command-frontmatter:
+  stage: test
+  image: library/python:3.11
+  script:
+    - bash tests/validate-command-frontmatter.sh

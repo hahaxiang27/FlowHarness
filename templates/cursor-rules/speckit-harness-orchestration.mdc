@@ -1,0 +1,35 @@
+---
+description: SpecKit + Harness 编排：每步暂停、可视化面板与 dashboard 状态同步
+alwaysApply: true
+---
+
+# SpecKit + Harness Orchestration (Step Gate + Dashboard)
+
+This project uses SpecKit + Harness through natural-language requirements. Follow `AGENTS.md` and these rules in every requirement session.
+
+## Step Gate (mandatory)
+
+- **One concrete command per user turn** unless the user explicitly asks to batch remaining steps.
+- After installation or when constitution is missing/incomplete, run `speckit.constitution` first, report the result, then **stop**.
+- New requirement -> select router mode, publish the concrete `speckit.*` / `harness.*` command flow, initialize dashboard, then **stop**.
+- User says `继续` / `下一步` / `next` / `continue` -> read the next command from `specs/{REQUIREMENT_ID}/dashboard-state.json`, execute exactly one command, then **stop again**.
+- After every concrete command (`speckit.*`, `harness.*`, etc.):
+  1. Update `specs/{REQUIREMENT_ID}/dashboard-state.json` (`.harness/prompts/dashboard-state-updater.md`)
+  2. Update `specs/{REQUIREMENT_ID}/dashboard.html` when panel content exists (`.harness/prompts/dashboard-updater.md`)
+  3. Hand off with `.harness/prompts/step-gate-handoff.md`
+- Low or medium risk **never** grants auto-continue.
+- Router `direct` mode: implement immediately; skip specs, dashboard, and step gates (`.harness/prompts/direct-implement.md`).
+
+## Dashboard (mandatory for non-direct modes)
+
+After mode selection and before the first concrete command:
+
+1. Copy `.harness/templates/dashboard.html` -> `specs/{REQUIREMENT_ID}/dashboard.html`
+2. Write `specs/{REQUIREMENT_ID}/dashboard-state.json` with `workflow_plan.steps` (`.harness/prompts/dashboard-plan-init.md`)
+3. Tell the user to open the HTML file in a browser; it auto-refreshes from `dashboard-state.json`
+
+## Runtime Paths
+
+- Harness prompts: `.harness/prompts/`
+- Harness templates: `.harness/templates/`
+- Router: `.ai-dev/router/` (fallback: toolkit `router/`)

@@ -1,0 +1,31 @@
+FlowGate SDD — SpecKit + Harness AI Dev Environment
+Copyright (c) 2024-2026 AsiaInfo, Inc. All Rights Reserved.
+
+This repository and its contents are licensed under the MIT License (see LICENSE),
+except for trademarks and branding assets as stated below.
+
+Trademark Notice
+----------------
+"FlowGate SDD", "流门 SDD", "FlowGate", and related product names are
+trademarks of AsiaInfo, Inc. You may not use these names or confusingly
+similar names to endorse or promote derivative products without prior
+written permission.
+
+Attribution Requirement
+-----------------------
+Redistributions of source code or substantial portions of this project
+must retain this NOTICE file, the LICENSE file, and all copyright headers
+in managed template blocks (for example `speckit-harness-toolkit:managed`
+sections in AGENTS.md).
+
+Upstream Acknowledgements
+-------------------------
+This project builds upon concepts and tooling patterns from:
+- GitHub SpecKit (https://github.com/github/spec-kit)
+- Harness-driven quality loop methodology documented in this repository
+
+Contributions
+-------------
+By submitting a contribution, you agree that your contribution is licensed
+under the same MIT License and that you have the right to submit it.
+See CONTRIBUTING.md for full terms.

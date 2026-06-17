@@ -1,0 +1,71 @@
+scoring:
+  risk_keywords:
+    permission: 2
+    approval: 3
+    payment: 4
+    delete: 3
+    data_migration: 4
+    SSO: 3
+    audit_log: 3
+    security: 4
+    cross_module: 3
+    core_flow: 4
+    external_api: 3
+
+  doc_keywords:
+    - requirements
+    - PRD
+    - technical proposal
+    - API documentation
+    - acceptance criteria
+    - design document
+
+  debug_keywords:
+    - error
+    - fix
+    - test failed
+    - build failed
+    - production issue
+    - diagnose
+    - troubleshoot
+
+  bypass_keywords:
+    - 按钮
+    - 弹窗
+    - modal
+    - 样式
+    - 文案
+    - 前端
+    - UI
+    - 帮助说明
+    - tooltip
+    - dialog
+
+rules:
+  - name: Document task
+    if: user_intent == "document"
+    mode: doc
+
+  - name: Debug task
+    if: user_intent == "debug"
+    mode: debug
+
+  - name: Trivial direct change
+    if: bypass_toolkit == true
+    mode: direct
+
+  - name: Low-risk small task
+    if: risk_score <= 2 and estimated_files <= 3
+    mode: fast
+
+  - name: Medium feature
+    if: risk_score <= 6 and estimated_files <= 8
+    mode: speclite
+
+  - name: High-risk closed loop
+    if: risk_score > 6 or modules_count > 2
+    mode: full
+
+  - name: Conservative default
+    if: uncertainty == "high"
+    mode: speclite

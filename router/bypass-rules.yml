@@ -1,0 +1,74 @@
+# When all eligibility checks pass and no blocker matches, select mode: direct.
+# Direct mode bypasses SDD / SpecKit / Harness artifacts and implements immediately.
+
+eligibility:
+  max_estimated_files: 2
+  max_modules: 1
+  max_risk_score: 2
+  allowed_change_types:
+    - ui
+    - copy
+    - style
+    - tooltip
+    - modal
+    - label
+    - icon
+    - layout
+    - frontend-only
+
+signals:
+  ui_keywords:
+    - 按钮
+    - 弹窗
+    - modal
+    - dialog
+    - tooltip
+    - 样式
+    - 文案
+    - 前端
+    - UI
+    - 页面
+    - 登录页
+    - login page
+    - 帮助说明
+    - 提示
+  explicit_bypass_keywords:
+    - 很简单
+    - 小改动
+    - 直接改
+    - 不用走流程
+    - 不用 spec
+    - 纯 UI
+
+blockers:
+  risk_keywords:
+    - permission
+    - approval
+    - audit_log
+    - data_migration
+    - payment
+    - delete
+    - cross_module
+    - core_flow
+    - SSO
+  intent_keywords:
+    - 改登录逻辑
+    - 改鉴权
+    - 改权限
+    - 新增接口
+    - 改 API
+    - 数据库
+    - 迁移
+    - 审批流
+    - 审计
+  user_forces_toolkit:
+    - 走 full
+    - 走 speclite
+    - 生成 spec
+    - 完整流程
+    - 闭环
+
+notes:
+  - Login-page UI-only changes may still qualify when the user explicitly says auth/login logic is unchanged.
+  - If estimated_files is 3 but the change is clearly one page + one shared modal component, prefer direct over speclite.
+  - When uncertain between direct and fast, choose direct only if no spec/plan/tasks value is expected.

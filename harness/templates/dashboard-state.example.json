@@ -1,0 +1,75 @@
+{
+  "current_requirement": {
+    "requirement_id": "DPSHCT-2983-xxx",
+    "title": "SN binding search page",
+    "summary": "Search by account or SN, route unbinding through approval, and record audit logs.",
+    "feature_path": "specs/DPSHCT-2983-xxx"
+  },
+  "mode": "full",
+  "requirement_status": {
+    "clarity": "approval and audit scope confirmed",
+    "open_questions": [],
+    "scope_boundaries": ["no production data migration in this sprint"]
+  },
+  "design": {
+    "technical_plan": "Use existing approval and audit services.",
+    "impacted_modules": ["customer", "approval", "audit"],
+    "api_contracts": ["contracts/sn-binding.yaml"]
+  },
+  "execution": {
+    "task_progress": "8/12 complete",
+    "changed_files": ["src/sn/SearchPage.tsx", "src/audit/AuditService.ts"],
+    "remaining_tasks": ["approval negative-path tests", "checkpoint"]
+  },
+  "verification": {
+    "build": "passed",
+    "unit_tests": "passed",
+    "integration_tests": "pending",
+    "security_scan": "not required",
+    "boundary_review": "passed"
+  },
+  "risk": {
+    "level": "high",
+    "open_risks": ["approval fallback behavior still needs verification"],
+    "approval_required": true
+  },
+  "evidence": {
+    "diff": "git diff --stat",
+    "test_results": ["unit test output path"],
+    "review_results": ["harness review report"],
+    "checkpoint": ".harness/sprints/DPSHCT-2983-xxx/sprint-1-checkpoint.md"
+  },
+  "learning": {
+    "new_rules": ["reuse existing approval service for unbind workflows"],
+    "mistakes_corrected": []
+  },
+  "workflow_plan": {
+    "phase": "awaiting_user",
+    "current_step_index": 9,
+    "mode_reason": "permissions + approval + audit log",
+    "artifact_roots": [
+      "specs/DPSHCT-2983-xxx/",
+      ".harness/sprints/DPSHCT-2983-xxx/",
+      ".harness/metrics/DPSHCT-2983-xxx/"
+    ],
+    "approval_gates": ["harness.exec before approval workflow changes"],
+    "next_user_action": "下一步 / 继续 / next / continue",
+    "next_command": "harness.exec",
+    "next_command_label": "Execute tasks",
+    "steps": [
+      { "order": 1, "command": "speckit.specify", "label": "Write specification", "status": "done", "outputs": ["spec.md"] },
+      { "order": 2, "command": "speckit.clarify", "label": "Clarify open questions", "status": "done", "outputs": ["spec.md"] },
+      { "order": 3, "command": "speckit.checklist", "label": "Generate quality checklist", "status": "done", "outputs": ["checklists/*.md"] },
+      { "order": 4, "command": "speckit.plan", "label": "Create implementation plan", "status": "done", "outputs": ["plan.md", "contracts/"] },
+      { "order": 5, "command": "speckit.tasks", "label": "Generate task list", "status": "done", "outputs": ["tasks.md"] },
+      { "order": 6, "command": "speckit.analyze", "label": "Analyze spec/plan/tasks consistency", "status": "done", "outputs": ["analysis report"] },
+      { "order": 7, "command": "harness.scope", "label": "Declare module boundaries", "status": "done", "outputs": ["scope yaml"] },
+      { "order": 8, "command": "harness.start", "label": "Start sprint execution", "status": "done", "outputs": ["sprint progress"] },
+      { "order": 9, "command": "harness.exec", "label": "Execute tasks", "status": "next", "outputs": ["code diff"], "requires_approval": true },
+      { "order": 10, "command": "harness.eval", "label": "Run verification gates", "status": "pending", "outputs": ["eval report"] },
+      { "order": 11, "command": "harness.fix", "label": "Correct failures", "status": "pending", "outputs": ["fix report"] },
+      { "order": 12, "command": "harness.checkpoint", "label": "Constitution checkpoint", "status": "pending", "outputs": ["checkpoint.md"] },
+      { "order": 13, "command": "harness.metrics", "label": "Collect sprint metrics", "status": "pending", "outputs": ["metrics.json"] }
+    ]
+  }
+}

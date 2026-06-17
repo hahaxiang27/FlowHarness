@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./**)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(npm test *)",
+      "Bash(npm run lint *)",
+      "Bash(mvn test *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(secrets/**)",
+      "Bash(rm -rf *)",
+      "Bash(git push *)",
+      "Bash(curl * | sh)",
+      "Bash(database migrate *)"
+    ]
+  }
+}
