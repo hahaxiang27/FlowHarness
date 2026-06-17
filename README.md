@@ -1,11 +1,28 @@
-﻿# FlowHarness SDD
+﻿<div align="center">
 
-**SpecKit + Harness AI 开发环境** — 自然语言驱动规范开发，Router 选模式，Step Gate 逐步执行，Dashboard 实时可视。
+# ⚡ FlowHarness SDD
 
-[English README](README.en.md) · [创新点对比](docs/ProMax-Innovation-vs-Base.md) · [贡献指南](CONTRIBUTING.zh-CN.md) · [安全策略](SECURITY.md)
+### Harness 驱动的 AI 规范开发引擎
+
+**说需求 · 选模式 · 看面板 · 一步步交付**
+
+*Natural Language In · Governed Flow Out*
+
+<br/>
+
+一句话启动 **AI Dev Environment** — Router 六模式路由 · Step Gate 逐步门禁 · Dashboard 实况面板
+
+[English README](README.en.md) · [使用指南](docs/ProMax-Innovation-vs-Base.md) · [贡献指南](CONTRIBUTING.zh-CN.md) · [安全策略](SECURITY.md)
+
+<br/>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NOTICE](https://img.shields.io/badge/Copyright-FlowHarness-orange.svg)](NOTICE)
+[![Router](https://img.shields.io/badge/Router-6_Modes-purple.svg)](#这是什么)
+[![Step Gate](https://img.shields.io/badge/Step_Gate-One_Cmd_Per_Turn-red.svg)](#这是什么)
+[![Dashboard](https://img.shields.io/badge/Dashboard-Live_Panel-green.svg)](#dashboard-memory-and-safety)
+
+</div>
 
 ---
 
@@ -42,6 +59,8 @@ bash /path/to/FlowHarness/install.sh --agent cursor
 
 ### 2. 初始化宪法 → 新开会话 → 描述需求
 
+用 **natural-language** 描述需求即可，无需记忆 slash 命令。日常操作：说明需求 → 确认计划 → 回复「继续」进入 **next step**。
+
 ```text
 Step 1  install.sh 安装到项目
 Step 2  第一个会话：执行 speckit.constitution
@@ -49,7 +68,7 @@ Step 3  宪法完成后新开 AI 会话
 Step 4  自然语言描述需求 → 确认模式与命令流 → 回复「继续」逐步执行
 ```
 
-详细步骤与 full 模式产物结构见 [docs/ProMax-Innovation-vs-Base.md](docs/ProMax-Innovation-vs-Base.md)。
+详细步骤与 full 模式产物结构见 [使用指南](docs/ProMax-Innovation-vs-Base.md)。
 
 ### 3. 常用安装参数
 
@@ -129,8 +148,16 @@ bash tests/validate-agents-merge.sh
 
 ---
 
+## Dashboard, Memory, And Safety
+
+- **Dashboard**：非 direct 需求在首个命令前初始化 `specs/{REQUIREMENT_ID}/dashboard.html` 与 `dashboard-state.json`，浏览器自动刷新进度。
+- **Memory**：可复用经验沉淀于 `.ai-dev/context/`（mistakes、patterns、team-rules），`harness.metrics` 后可回写。
+- **Safety**：禁止分发 `.claude/settings.local.json`；请使用 `.claude/settings.template.json` 作为安全基线。
+
+---
+
 ## 相关链接
 
 - [SpecKit 官方仓库](https://github.com/github/spec-kit)
-- [ProMax 创新点与基线版对比](docs/ProMax-Innovation-vs-Base.md)
+- [FlowHarness SDD 使用指南](docs/ProMax-Innovation-vs-Base.md)
 - [Claude Code 文档](https://docs.claude.com/en/docs/claude-code/)

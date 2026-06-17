@@ -1,11 +1,28 @@
-# FlowHarness SDD
+<div align="center">
 
-**SpecKit + Harness AI Dev Environment** — natural-language driven spec development with Router mode selection, Step Gate execution, and live Dashboard visibility.
+# ⚡ FlowHarness SDD
 
-[中文 README](README.md) · [Innovation vs Base](docs/ProMax-Innovation-vs-Base.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+### SpecKit + Harness · AI Dev Environment
+
+**Speak Requirements · Route Modes · Watch Dashboard · Ship Step by Step**
+
+*Natural Language In · Governed Flow Out*
+
+<br/>
+
+One sentence in — **Router** picks the flow · **Step Gate** enforces discipline · **Dashboard** shows live progress
+
+[中文 README](README.md) · [Usage Guide](docs/ProMax-Innovation-vs-Base.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+
+<br/>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NOTICE](https://img.shields.io/badge/Copyright-FlowHarness-orange.svg)](NOTICE)
+[![Router](https://img.shields.io/badge/Router-6_Modes-purple.svg)](#overview)
+[![Step Gate](https://img.shields.io/badge/Step_Gate-One_Cmd_Per_Turn-red.svg)](#overview)
+[![Dashboard](https://img.shields.io/badge/Dashboard-Live_Panel-green.svg)](#dashboard-memory-and-safety)
+
+</div>
 
 ---
 
@@ -42,6 +59,8 @@ bash /path/to/FlowHarness/install.sh --agent cursor
 
 ### 2. Constitution → new session → describe requirement
 
+Use **natural-language** requirements — no slash commands required. Typical flow: describe → confirm plan → reply `continue` for each **next step**.
+
 ```text
 Step 1  Run install.sh in your project
 Step 2  First session: run speckit.constitution
@@ -49,7 +68,7 @@ Step 3  Open a new AI session after constitution is ready
 Step 4  Describe requirement in natural language → confirm plan → reply "continue" step by step
 ```
 
-See [docs/ProMax-Innovation-vs-Base.md](docs/ProMax-Innovation-vs-Base.md) for full-mode artifact layout (Chinese).
+See [Usage Guide](docs/ProMax-Innovation-vs-Base.md) for full workflow and artifact layout (Chinese).
 
 ### 3. Common install flags
 
@@ -129,8 +148,16 @@ You may not use the name "FlowHarness SDD" to endorse derivative products withou
 
 ---
 
+## Dashboard, Memory, And Safety
+
+- **Dashboard**: non-direct requirements initialize `specs/{REQUIREMENT_ID}/dashboard.html` and `dashboard-state.json` before the first command; the browser panel auto-refreshes.
+- **Memory**: reusable patterns and team rules live under `.ai-dev/context/` and may be updated after `harness.metrics`.
+- **Safety**: do not distribute `.claude/settings.local.json`; use `.claude/settings.template.json` as the safe baseline.
+
+---
+
 ## Links
 
 - [SpecKit](https://github.com/github/spec-kit)
-- [Innovation comparison doc](docs/ProMax-Innovation-vs-Base.md)
+- [FlowHarness SDD Usage Guide](docs/ProMax-Innovation-vs-Base.md)
 - [Claude Code docs](https://docs.claude.com/en/docs/claude-code/)

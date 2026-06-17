@@ -1,6 +1,6 @@
 # 执行流程截图目录
 
-将 ProMax 版执行流程截图放在此目录，文件名与 `docs/ProMax-Innovation-vs-Base.md` 中的占位一致：
+将 FlowHarness SDD 执行流程截图放在此目录，文件名与 `docs/ProMax-Innovation-vs-Base.md` 中的占位一致：
 
 | 文件名 | 内容 |
 |--------|------|
