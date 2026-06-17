@@ -33,9 +33,11 @@ Natural-language requirement → Router (6 modes) → Dashboard
 ### 1. Install
 
 ```bash
-git clone https://github.com/hahaxiang27/speckit-harness-flowgate.git ~/flowharness-sdd
+git clone https://github.com/hahaxiang27/FlowHarness.git
+cd FlowHarness
+# install into your project
 cd /path/to/your/project
-bash ~/flowharness-sdd/install.sh --agent cursor
+bash /path/to/FlowHarness/install.sh --agent cursor
 ```
 
 ### 2. Constitution → new session → describe requirement
@@ -63,7 +65,7 @@ See [docs/ProMax-Innovation-vs-Base.md](docs/ProMax-Innovation-vs-Base.md) for f
 ## Repository Layout
 
 ```text
-flowharness-sdd/
+FlowHarness/
 ├── install.sh
 ├── router/
 ├── commands/

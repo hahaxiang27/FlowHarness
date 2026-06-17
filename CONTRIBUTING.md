@@ -40,8 +40,8 @@ Open an issue before starting work on these topics.
 ## Development Workflow
 
 ```bash
-git clone https://github.com/hahaxiang27/speckit-harness-flowgate.git
-cd speckit-harness-flowgate
+git clone https://github.com/hahaxiang27/FlowHarness.git
+cd FlowHarness
 bash tests/validate-install.sh
 bash tests/validate-agents-merge.sh
 bash tests/validate-router-config.sh
